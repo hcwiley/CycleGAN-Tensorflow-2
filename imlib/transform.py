@@ -44,4 +44,6 @@ def immerge(images, n_rows=None, n_cols=None, padding=0, pad_value=0):
         img[j * (h + padding):j * (h + padding) + h,
             i * (w + padding):i * (w + padding) + w, ...] = image
 
+    # clip the range -1 to 1
+    img = np.clip(img, -1, 1)
     return img
