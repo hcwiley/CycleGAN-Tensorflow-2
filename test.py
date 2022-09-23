@@ -15,6 +15,12 @@ py.arg('--experiment_dir')
 py.arg('--batch_size', type=int, default=32)
 test_args = py.args()
 args = py.args_from_yaml(py.join(test_args.experiment_dir, 'settings.yml'))
+
+# print all the args we are running with
+print('test.py args:')
+for k, v in vars(args).items():
+    print(k, v)
+
 args.__dict__.update(test_args.__dict__)
 
 
@@ -60,6 +66,8 @@ for A in A_dataset_test:
     A2B, A2B2A = sample_A2B(A)
     for A_i, A2B_i, A2B2A_i in zip(A, A2B, A2B2A):
         img = np.concatenate([A_i.numpy(), A2B_i.numpy(), A2B2A_i.numpy()], axis=1)
+        # clip the range -1 to 1
+        img = np.clip(img, -1, 1)
         im.imwrite(img, py.join(save_dir, py.name_ext(A_img_paths_test[i])))
         i += 1
 
@@ -70,5 +78,7 @@ for B in B_dataset_test:
     B2A, B2A2B = sample_B2A(B)
     for B_i, B2A_i, B2A2B_i in zip(B, B2A, B2A2B):
         img = np.concatenate([B_i.numpy(), B2A_i.numpy(), B2A2B_i.numpy()], axis=1)
+        # clip the range -1 to 1
+        img = np.clip(img, -1, 1)
         im.imwrite(img, py.join(save_dir, py.name_ext(B_img_paths_test[i])))
         i += 1
