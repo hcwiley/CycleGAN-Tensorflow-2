@@ -18,6 +18,7 @@ import module
 # ==============================================================================
 
 py.arg('--dataset', default='horse2zebra')
+py.arg('--output', default=None)
 py.arg('--datasets_dir', default='datasets')
 py.arg('--load_size', type=int, default=286)  # load image to this size
 py.arg('--crop_size', type=int, default=256)  # then crop to this size
@@ -34,8 +35,10 @@ py.arg('--identity_loss_weight', type=float, default=0.0)
 py.arg('--pool_size', type=int, default=50)  # pool size to store fake samples
 args = py.args()
 
-# output_dir
-output_dir = py.join('output', args.dataset)
+# output_dir, get it from the args name of the dir, or default to dataset name
+output = args.output or args.dataset
+output_dir = py.join('output', output)
+print('output_dir', output_dir)
 py.mkdir(output_dir)
 
 # save settings
