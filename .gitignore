@@ -2,3 +2,5 @@
 __pycache__/
 /datasets/
 /output/
+tmp/
+saved_models/

@@ -3,6 +3,7 @@ import numpy as np
 import pylib as py
 import tensorflow as tf
 import tf2lib as tl
+import sys
 
 import data
 import module
@@ -13,6 +14,8 @@ import module
 
 py.arg('--experiment_dir')
 py.arg('--batch_size', type=int, default=32)
+py.arg('--save', type=bool, default=False)
+py.arg('--model_dir', default=None)
 test_args = py.args()
 args = py.args_from_yaml(py.join(test_args.experiment_dir, 'settings.yml'))
 
@@ -39,6 +42,18 @@ B_dataset_test = data.make_dataset(B_img_paths_test, args.batch_size, args.load_
 # model
 G_A2B = module.ResnetGenerator(input_shape=(args.crop_size, args.crop_size, 3))
 G_B2A = module.ResnetGenerator(input_shape=(args.crop_size, args.crop_size, 3))
+
+
+if args.save:
+    # get output dir
+    output_dir = 'saved_models/{}/'.format(args.dataset)
+    # check if the user provided a model dir
+    if args.model_dir is not None:
+        output_dir = args.model_dir
+    print('saving model to: {}'.format(output_dir))
+    G_A2B.save('A2B'.format(output_dir))
+    G_B2A.save('B2A'.format(output_dir))
+    sys.exit(0)
 
 # resotre
 tl.Checkpoint(dict(G_A2B=G_A2B, G_B2A=G_B2A), py.join(args.experiment_dir, 'checkpoints')).restore()
