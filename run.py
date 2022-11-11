@@ -113,6 +113,9 @@ i = 0
 max_images = args.max_images
 if max_images == 0:
   max_images = len(input_images)
+
+total_predict_time = 0
+predict_time_avg = 0
 # iterate through all the images
 for input_image in input_images:
   if args.use_G_A2B:
@@ -138,6 +141,9 @@ for input_image in input_images:
 
     predict_time = end_time - start_time
 
+    total_predict_time += predict_time.total_seconds()
+    predict_time_avg = total_predict_time / i
+
     if args.verbose:
       print('{}/{}: wrote: {}'.format(i, max_images, output_image_path))
       # print the time it took to run the model
@@ -145,12 +151,14 @@ for input_image in input_images:
 
     # make a progress bar with the current % done and estimated time remaining
     progress = float(i) / float(max_images)
-    remaining = predict_time.total_seconds() * (1.0 - progress) / progress
+    # remaining = predict_time_avg * (1.0 - progress) / progress
+    remaining = (max_images * total_predict_time) / (i - total_predict_time)
     remaining = datetime.timedelta(seconds=remaining)
     # print('progress: {:.2f}%, remaining: {}'.format(
     # progress * 100.0, remaining))
+
     printProgressBar(i, max_images, prefix='Progress:',
-                     suffix='Est Time: {}'.format(remaining), length=50)
+                     suffix='Est Time: {} (avg: {:.2f})'.format(remaining, predict_time_avg), length=50)
 
   else:
     # benchmark time for

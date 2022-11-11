@@ -17,7 +17,7 @@
         "./datasets/landscape2cole_3/done",
         // "./datasets/landscape2cole_3/testA-bak2",
         "--max_images",
-        "10",
+        "100",
       ],
       "justMyCode": true
     }
