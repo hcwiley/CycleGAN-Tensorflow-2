@@ -99,3 +99,11 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
     ```console
     CUDA_VISIBLE_DEVICES=0 python test.py --experiment_dir ./output/summer2winter_yosemite
     ```
+
+
+## saving a model
+
+The `test.py` file also provides the ability to save a model for re-running on different machines and through the run.py script
+```bash
+ python test.py --save 1 --model_dir /Users/hcwiley/ml-models/hcwiley/$model_name --experiment_dir ./output/$model_name
+ ```

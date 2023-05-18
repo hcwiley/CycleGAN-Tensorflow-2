@@ -3,8 +3,10 @@ import pylib as py
 import tensorflow as tf
 import tf2lib as tl
 import numpy as np
+import uuid
 import os
 import datetime
+import time
 from printUtils import printProgressBar
 
 import data
@@ -15,7 +17,8 @@ import data
 
 py.arg('--models_dir')
 py.arg('--input_dir')
-py.arg('--output_dir')
+py.arg('--image', default=None)
+py.arg('--output_dir', default=None)
 py.arg('--max_images', type=int, default=0)
 py.arg('-v', '--verbose', type=bool, default=False)
 py.arg('--use_G_A2B', type=bool, default=True)
@@ -46,7 +49,12 @@ if args.verbose:
   G_B2A.summary()
 
 # get all the input images
-input_images = py.glob(args.input_dir, '*.jpg')
+input_images = []
+if args.image:
+  input_images = [args.image]
+else:
+  input_images = py.glob(args.input_dir, '*.jpg')
+
 output_dir = args.output_dir
 
 if output_dir is None:
@@ -88,6 +96,20 @@ def coPilotHallucinate(input_image):
   tf.io.write_file(output_image_path, output_image)
 
   print('wrote: {}'.format(output_image_path))
+
+
+def checkout_image(output_image_path):
+  # check if output_image_path exists and append a random hash if it does
+  print('check if output_image_path already exists: {}'.format(output_image_path))
+  if os.path.exists(output_image_path):
+    # split the output_image_path into the directory, the filename, and extension
+    name, ext = os.path.splitext(output_image_path)
+    # get the current epoch timestamp
+    epoch_ts = str(round(time.time()))
+    output_image_path = os.path.join(
+        os.path.dirname(output_image_path), os.path.basename(name) + '_' + epoch_ts + ext)
+    print('output_image_path already exists, using: {}'.format(output_image_path))
+  return output_image_path
 
 
 @tf.function
@@ -133,6 +155,8 @@ for input_image in input_images:
     output_image_path = os.path.join(output_dir, os.path.basename(input_image))
     # make sure the output directory exists
     os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
+    # make sure to not overwrite
+    output_image_path = checkout_image(output_image_path)
     im.imwrite(img, output_image_path)
 
     end_time = datetime.datetime.now()

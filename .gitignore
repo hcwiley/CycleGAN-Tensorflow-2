@@ -4,3 +4,7 @@ __pycache__/
 /output/
 tmp/
 saved_models/
+
+# hidden and swap files
+.DS_Store
+._*
