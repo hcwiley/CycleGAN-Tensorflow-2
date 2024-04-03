@@ -41,6 +41,10 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 ## Setup
 
 ```bash
+conda create -n cyclegan python=3.10
+
+conda activate cyclegan
+
 sh ./setup-macos-conda.sh
 ```
 
