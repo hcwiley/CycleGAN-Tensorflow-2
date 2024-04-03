@@ -38,32 +38,38 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 
 # Usage
 
+## Setup
+
+```bash
+sh ./setup-macos-conda.sh
+```
+
 - Environment
 
-    - Python 3.6
+    - Python 3.10
 
-    - TensorFlow 2.2, TensorFlow Addons 0.10.0
+    - TensorFlow 2.9, TensorFlow Addons 0.17.1
 
     - OpenCV, scikit-image, tqdm, oyaml
 
-    - *we recommend [Anaconda](https://www.anaconda.com/distribution/#download-section) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html#linux-installers), then you can create the TensorFlow 2.2 environment with commands below*
+    - *we recommend [Anaconda](https://www.anaconda.com/distribution/#download-section) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html#linux-installers), then you can create the TensorFlow 2.9 environment with commands below*
 
         ```console
-        conda create -n tensorflow-2.2 python=3.6
+        conda create -n cyclegan python=3.10
 
-        source activate tensorflow-2.2
+        conda activate cyclegan
 
-        conda install scikit-image tqdm tensorflow-gpu=2.2
+        conda install -c apple scikit-image tqdm tensorflow=2.9
 
         conda install -c conda-forge oyaml
 
-        pip install tensorflow-addons==0.10.0
+        pip install tensorflow-addons==0.17.1 tensorflow-macos==2.9.0 tensorflow-metal==0.5.0
         ```
 
     - *NOTICE: if you create a new conda environment, remember to activate it before any other command*
 
         ```console
-        source activate tensorflow-2.2
+        source activate cyclegan
         ```
 
 - Dataset
